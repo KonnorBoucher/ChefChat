@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+chroma_db/
+*.pdf
+
+# Node
+node_modules/
+dist/
+.DS_Store
+
+# Models (too large for GitHub)
+*.bin
+*.safetensors
+models/
