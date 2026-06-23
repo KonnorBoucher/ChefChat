@@ -10,10 +10,10 @@ collection = chroma_client.get_or_create_collection(name="recipes")
 
 def retrieve_recipes(question:str) -> str:
     embeddings = embedding_model.encode(question).tolist()
-    results = collection.query(query_embeddings=[embeddings], n_results=3)
+    results = collection.query(query_embeddings=[embeddings], n_results=3) # returns 3 recipes
 
-    documents = results["documents"][0]
-    final_results = "\n\n---\n\n".join(documents)
+    documents = results["documents"][0] # list of all recipes collected
+    final_results = "\n\n---\n\n".join(documents) # join and separate each recipe
 
     return final_results
 
