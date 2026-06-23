@@ -13,8 +13,5 @@ dependencies:
     - langchain-community
     - chromadb
     - sentence-transformers
-    - transformers
-    - torch
-    - bitsandbytes-windows
-    - accelerate
     - python-multipart
+    - ollama
