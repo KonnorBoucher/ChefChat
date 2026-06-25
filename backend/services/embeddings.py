@@ -10,36 +10,34 @@ embedding_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 chroma_client = chromadb.PersistentClient(path="../chroma_db")
 collection = chroma_client.get_or_create_collection(name="recipes") # persists between server restarts
 
-
-def extract_text_from_pdf(file_bytes: bytes) -> str:
-    doc = fitz.open(stream=file_bytes, filetype="pdf") # reads pdfs from memory
-    text = ""
-    for page in doc:
-        text += page.get_text()
-    return text # adds all text into one large string and returns it
-
-
-def chunk_by_recipe(text: str) -> list[str]:
-    # Common recipe header patterns in cookbooks
-    recipe_patterns = [
-        r'\n(?=[A-Z][A-Z\s]{3,}\n)',      # ALL CAPS TITLE
-        r'\n(?=\d+\.\s+[A-Z])',            # Numbered recipes like "1. Pasta..."
-        r'\n(?=Recipe\s*:)',               # "Recipe:" prefix
-        r'\n(?=#{1,3}\s)',                 # Markdown headers
+def is_recipe_page(text: str) -> bool:
+    recipe_keywords = [
+        "ingredients",
+        "instructions", 
+        "directions",
+        "prep time",
+        "cook time",
+        "serves",
+        "servings",
+        "yield"
     ]
+    text_lower = text.lower()
+    matches = sum(1 for keyword in recipe_keywords if keyword in text_lower)
+    return matches >= 2
 
-    combined_pattern = '|'.join(recipe_patterns) # | is or, so splits on any of the 4 cases
-    chunks = re.split(combined_pattern, text)
-
-    # Filter out chunks too short to be a real recipe
-    chunks = [c.strip() for c in chunks if len(c.strip()) > 100]
-
+def chunk_by_page(file_bytes: bytes) -> list[str]:
+    doc = fitz.open(stream=file_bytes, filetype="pdf")
+    chunks = []
+    for page in doc:
+        text = page.get_text()
+        if len(text.strip()) > 100 and is_recipe_page(text):
+            chunks.append(text.strip())
     return chunks
 
 
+
 def embed_and_store(file_bytes: bytes, filename: str) -> int:
-    text = extract_text_from_pdf(file_bytes)
-    chunks = chunk_by_recipe(text) # creates chunks from text
+    chunks = chunk_by_page(file_bytes) # creates chunks from text
 
     embeddings = embedding_model.encode(chunks).tolist() # turns chunks to vectors
     ids = [f"{filename}_{i}" for i in range(len(chunks))] # gives each chunk an id

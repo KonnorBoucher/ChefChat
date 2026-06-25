@@ -24,3 +24,14 @@ Bake for 9-11 minutes or until golden brown. Cool on baking sheet for 2 minutes.
                 )
 
 print(test_answer)
+
+from services.embeddings import chunk_by_page
+
+with open(r"c:\Users\hb536\Downloads\trending-chocolate-recipe-collection-sunbutter.pdf", "rb") as f:
+    chunks = chunk_by_page(f.read())
+
+print(f"Found {len(chunks)} recipe pages")
+print("--- CHUNK 1 ---")
+print(chunks[0][:500])
+print("--- CHUNK 2 ---")
+print(chunks[1][:500])
