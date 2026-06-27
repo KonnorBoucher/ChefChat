@@ -19,11 +19,36 @@ def is_recipe_page(text: str) -> bool:
         "cook time",
         "serves",
         "servings",
-        "yield"
+        "yield",
+        "tablespoon",
+        "teaspoon",
+        "cup",
+        "cups",
+        "halves",
+        "In a bowl",
+        "over medium",
+        "over low",
+        "stir until",
+        "degrees",
+        "to a boil",
+        "mix together",
+        "cover tightly",
+        "clove",
+        "whole",
+        "1/8",
+        "1/4",
+        "1/2",
+        "2/3",
+        "3/4",
+        "stir in",
+        "cover for",
+        "cover and",
+        "preheat",
+        "from the oven"
     ]
     text_lower = text.lower()
     matches = sum(1 for keyword in recipe_keywords if keyword in text_lower)
-    return matches >= 2
+    return matches >= 5
 
 def chunk_by_page(file_bytes: bytes) -> list[str]:
     doc = fitz.open(stream=file_bytes, filetype="pdf")
