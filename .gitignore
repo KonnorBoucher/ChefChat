@@ -16,3 +16,6 @@ dist/
 *.safetensors
 models/
 *.gguf
+
+# Visual Studio Code
+.vscode/
