@@ -71,4 +71,22 @@ npm run dev
 
 ---
 
+# Demo:
+
+In this example, 2 PDFs have been uploaded and embedded by the application, One for baked treats and one for Chinese cooking.
+
+Here is the FAST API Docs:
+
+[Docs](Screenshots/FastAPI_Docs.png)
+
+Here we ask the chatbot what we should make if we only have 45 minutes
+
+[Chat](Screenshots/Chat_Example.png)
+
+Here is the recipe it refers to:
+
+[Recipe](Screenshots/Recipe_Example.png)
+
+Notice how the chat bot can understand these recipes, and output one that takes exactly 45 minutes!!
+
 Built by [Konnor Boucher](https://github.com/KonnorBoucher)
